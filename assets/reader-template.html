@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>讲义阅读版</title>
+<style>
+:root{--accent:#35566e;--font-size:17px;--leading:1.85;--indent:2em;--background:#f3f5f6;--border:#d8e0e5}
+*{box-sizing:border-box}body{margin:0;background:var(--background);color:#24323d;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}
+button,input,select,textarea{font:inherit}button,select,input[type=color]{cursor:pointer}button{background:white;border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--accent)}button:hover{border-color:var(--accent)}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+header{max-width:1220px;margin:auto;padding:32px 28px 20px}header h1{font-size:27px;margin:8px 0 12px;font-weight:650;letter-spacing:-.5px}.eyebrow{color:var(--accent);font-size:12px;letter-spacing:2px}.intro{margin:0;color:#65727c;font-size:14px;line-height:1.7}.layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:24px;max-width:1220px;padding:0 28px 48px;margin:auto}
+aside{align-self:start;position:sticky;top:20px;background:white;border:1px solid var(--border);border-radius:14px;padding:20px}.section-label{font-size:12px;color:#78848c;margin:0 0 12px}nav{display:flex;flex-direction:column;gap:8px}nav button{text-align:left;border-color:transparent;font-size:14px}nav button[aria-current=true]{background:#edf2f5;border-color:var(--border);font-weight:600}aside label{display:block;font-size:13px;margin:16px 0 7px}aside input[type=range],aside select{width:100%}aside select{padding:7px;background:white;border:1px solid var(--border);border-radius:6px}aside input[type=color]{vertical-align:middle;margin-left:8px;width:36px;height:26px;border:0;background:transparent}aside .actions{display:grid;gap:8px;margin-top:22px}
+.searchbar{display:flex;align-items:center;gap:12px;margin:0 0 16px}.searchbar input{width:100%;padding:12px 15px;border:1px solid var(--border);border-radius:10px;background:white}.searchbar span{font-size:12px;white-space:nowrap;color:#6e7a83}.article{background:white;border:1px solid var(--border);border-radius:14px;padding:34px 44px;margin-bottom:18px}.article h2{margin:0 0 18px;font-size:26px;line-height:1.5;color:var(--accent)}.article h3{font-size:19px;margin:30px 0 12px;color:var(--accent)}.article p{font-family:"Songti SC","Noto Serif CJK SC",serif;font-size:var(--font-size);line-height:var(--leading);text-indent:var(--indent);margin:12px 0}.source{border-left:3px solid var(--accent);padding:10px 14px;background:#f4f7f8;font-size:13px;line-height:1.7;color:#60717d;white-space:pre-wrap}.equation{font-family:"Times New Roman",serif;text-align:center;font-size:22px;padding:18px 8px;background:#f7f9fa;border-radius:8px;white-space:pre-wrap;overflow-wrap:anywhere}.code-wrap{position:relative}.code-wrap button{position:absolute;right:10px;top:10px;font-size:12px}pre{padding:45px 18px 18px;border:1px solid var(--border);border-radius:8px;overflow:auto;font-size:13px;line-height:1.6;background:#fafbfc;white-space:pre-wrap;font-family:Menlo,Consolas,monospace}
+.exercise{padding:15px 0;border-top:1px solid #edf0f2;font-size:var(--font-size);line-height:var(--leading)}details{margin-top:10px;font-size:14px}summary{color:var(--accent);cursor:pointer}details .answer{padding:12px 14px;background:#f4f7f8;white-space:pre-wrap}.review{margin-top:32px;padding-top:20px;border-top:1px solid var(--border)}.review label{display:block;font-size:14px;margin:18px 0 8px}.review textarea{width:100%;min-height:84px;border:1px solid var(--border);border-radius:8px;padding:12px;line-height:1.6;resize:vertical}.review .note{font-size:12px;color:#65727c;line-height:1.6}.previous{font-size:14px;white-space:pre-wrap;line-height:1.8;padding:14px;background:#f7f9fa;border-radius:8px}.empty{padding:30px;background:white;border-radius:12px;color:#65727c}footer{font-size:12px;margin-top:16px;color:#6e7a83;line-height:1.7}[hidden]{display:none!important}
+@media(max-width:800px){header{padding:24px 18px 18px}.layout{display:block;padding:0 18px 30px}aside{position:static;margin-bottom:18px;padding:16px}nav{flex-direction:row;flex-wrap:wrap}aside .controls{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}.article{padding:24px}.article h2{font-size:23px}.searchbar{flex-wrap:wrap}}@media print{aside,.searchbar,.review,header .intro,footer{display:none}.layout{display:block;padding:0}.article{border:none;padding:0}details{display:block}.answer{display:block}body{background:white}}
+</style>
+</head>
+<body>
+<header><div class="eyebrow">SUBJECT LECTURE NOTES</div><h1 id="title">讲义阅读版</h1><p class="intro" id="description"></p></header>
+<div class="layout">
+<aside><p class="section-label">章节目录</p><nav id="navigation" aria-label="章节目录"></nav>
+<div class="controls">
+<div><label for="preset">排版方向</label><select id="preset"><option value="#35566e">蓝灰 · 默认</option><option value="#35634d">深绿</option><option value="#222222">黑白</option><option value="custom" disabled>自选配色</option></select></div>
+<div><label for="color">自选主色<input id="color" type="color" value="#35566e"></label></div>
+<div><label for="size">字号 <output id="size-value">17</output> px</label><input id="size" type="range" min="14" max="22" value="17"></div>
+<div><label for="leading">行距 <output id="leading-value">1.85</output></label><input id="leading" type="range" min="1.4" max="2.2" step="0.05" value="1.85"></div>
+<div><label for="indent">首行缩进</label><select id="indent"><option value="2">2字</option><option value="1">1字</option><option value="0">不缩进</option></select></div>
+</div>
+<div class="actions"><button id="export">导出偏好与反馈</button><button id="reset">重置排版</button></div>
+<footer>这里调整的是阅读版。导出偏好交给agent后，再同步正式讲义；不会直接改动源文件。</footer></aside>
+<main><div class="searchbar"><input id="search" type="search" placeholder="搜索概念、符号或习题" aria-label="搜索全书内容"><span id="results" aria-live="polite"></span></div><section id="export-panel" class="article review" hidden><h2>导出的偏好与反馈</h2><p>将以下内容交给agent。也可以下载JSON文件；浏览器无法下载时，直接复制文本。</p><label for="export-text">导出内容</label><textarea id="export-text" readonly rows="8"></textarea><button id="download-export">下载JSON文件</button> <button id="copy-export">复制导出内容</button> <button id="close-export">收起导出内容</button></section><div id="chapters"></div><div id="empty" class="empty" hidden>没有找到匹配内容，请换一个关键词。</div><footer id="storage" aria-live="polite"></footer></main>
+</div><noscript>启用JavaScript后可使用阅读、搜索和排版功能。</noscript>
+<script type="application/json" id="lecture-data">__LECTURE_DATA__</script>
+<script>
+const data=JSON.parse(document.getElementById('lecture-data').textContent);
+const el=id=>document.getElementById(id);
+const make=(tag,text,className)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(className)node.className=className;return node};
+const key='subject-lecture-notes:'+data.title;let stored={};try{stored=JSON.parse(localStorage.getItem(key)||'{}')}catch{}
+let selected=data.chapters[0].id;const records=[];const feedback=stored.feedback||{};
+document.title=data.title;el('title').textContent=data.title;el('description').textContent=data.description||'可搜索的阅读版，含资料出处、习题答案和局部修改反馈。';
+for(const chapter of data.chapters){
+ const button=make('button',chapter.title);button.type='button';button.addEventListener('click',()=>{selected=chapter.id;el('search').value='';renderVisibility();});el('navigation').append(button);
+ const article=make('article',undefined,'article');article.id=chapter.id;article.append(make('h2',chapter.title));if(chapter.source)article.append(make('div',chapter.source,'source'));
+ for(const [i,section] of chapter.sections.entries()){
+  const block=make('section');block.id=chapter.id+'-section-'+i;block.append(make('h3',section.title));
+  if(section.source)block.append(make('div',section.source,'source'));
+  for(const paragraph of section.paragraphs||[])block.append(make('p',paragraph));
+  if(section.equation)block.append(make('div',section.equation,'equation'));
+  if(section.code){const wrap=make('div',undefined,'code-wrap');const pre=make('pre',section.code);const copy=make('button','复制代码');copy.type='button';copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(section.code);copy.textContent='已复制'}catch{const range=document.createRange();range.selectNodeContents(pre);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);copy.textContent='已选中，请复制'}});wrap.append(copy,pre);block.append(wrap)}
+  for(const [j,exercise] of (section.exercises||[]).entries()){const item=make('div',undefined,'exercise');item.append(make('div',`练习 ${i+1}.${j+1}　${exercise.question}`));const details=make('details');details.append(make('summary','查看参考答案'),make('div',exercise.answer,'answer'));item.append(details);block.append(item)}
+  article.append(block);
+ }
+ const review=make('div',undefined,'review');
+ if(chapter.previous){const old=make('details');old.append(make('summary','查看修改前的段落'),make('div',chapter.previous,'previous'));review.append(old)}
+ if(chapter.revision_note)review.append(make('div','本次修改：'+chapter.revision_note,'source'));
+ const label=make('label','对本章的修改意见');label.htmlFor='feedback-'+chapter.id;const field=make('textarea');field.id=label.htmlFor;field.placeholder='例如：只补第二节推导，保留符号和例题';field.value=feedback[chapter.id]||'';field.addEventListener('input',()=>{feedback[chapter.id]=field.value;save()});review.append(label,field,make('div','反馈仅保存在当前浏览器。导出后交给agent处理，不会自动重写讲义。','note'));article.append(review);el('chapters').append(article);
+ records.push({chapter,article,button,text:JSON.stringify(chapter).toLocaleLowerCase()});
+}
+function renderVisibility(){const query=el('search').value.trim().toLocaleLowerCase();let count=0;for(const item of records){const show=query?item.text.includes(query):item.chapter.id===selected;item.article.hidden=!show;if(show)count++;item.button.setAttribute('aria-current',String(!query&&item.chapter.id===selected))}el('empty').hidden=count>0;el('results').textContent=query?`匹配 ${count} 章`:`共 ${records.length} 章`}
+function settings(){return{color:el('color').value,size:Number(el('size').value),leading:Number(el('leading').value),indent:Number(el('indent').value)}}
+function save(){try{localStorage.setItem(key,JSON.stringify({settings:settings(),feedback}));el('storage').textContent='偏好和反馈已保存在当前浏览器。'}catch{el('storage').textContent='当前浏览器不能保存，请使用导出功能。'}}
+function apply(){const s=settings();el('preset').value=['#35566e','#35634d','#222222'].includes(s.color)?s.color:'custom';document.documentElement.style.setProperty('--accent',s.color);document.documentElement.style.setProperty('--font-size',s.size+'px');document.documentElement.style.setProperty('--leading',s.leading);document.documentElement.style.setProperty('--indent',s.indent+'em');el('size-value').textContent=s.size;el('leading-value').textContent=s.leading;save()}
+const prefs=stored.settings||{};for(const id of ['color','size','leading','indent'])if(prefs[id]!==undefined)el(id).value=prefs[id];
+for(const id of ['color','size','leading','indent'])el(id).addEventListener('input',apply);
+el('preset').addEventListener('change',()=>{el('color').value=el('preset').value;apply()});el('search').addEventListener('input',renderVisibility);
+el('reset').addEventListener('click',()=>{el('color').value='#35566e';el('preset').value='#35566e';el('size').value='17';el('leading').value='1.85';el('indent').value='2';apply()});
+el('export').addEventListener('click',()=>{const payload={title:data.title,reader_settings:settings(),settings_scope:'仅阅读版，请经agent映射后应用正式讲义',feedback};el('export-text').value=JSON.stringify(payload,null,2);el('export-panel').hidden=false;el('export-panel').scrollIntoView({behavior:'smooth',block:'start'})});
+el('download-export').addEventListener('click',()=>{const blob=new Blob([el('export-text').value],{type:'application/json'});const url=URL.createObjectURL(blob);const link=make('a');link.href=url;link.download='讲义偏好与反馈.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000)});
+el('copy-export').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(el('export-text').value);el('copy-export').textContent='已复制'}catch{el('export-text').focus();el('export-text').select();el('copy-export').textContent='文本已选中，请复制'}});
+el('close-export').addEventListener('click',()=>{el('export-panel').hidden=true});
+apply();renderVisibility();
+</script>
+</body></html>

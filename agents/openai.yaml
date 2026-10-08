@@ -1,0 +1,4 @@
+interface:
+  display_name: "跨学科讲义编写"
+  short_description: "沿用资料符号，一次设置并复用偏好，支持样稿、局部修改、进度恢复和累计交付"
+  default_prompt: "使用 $subject-lecture-notes 编写讲义，先读已有设定，一次询问关键缺项，提供资料回执与代表性样稿，沿用原符号并按完整章节累计交付。"

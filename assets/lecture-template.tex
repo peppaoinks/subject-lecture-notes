@@ -1,0 +1,176 @@
+% 单文件讲义模板。当前正文仅为排版样页，新项目请替换为实际课程内容。
+% 使用 XeLaTeX 编译；项目参数集中在本文件开头。
+\documentclass[UTF8,fontset=none,zihao=-4,a4paper]{ctexart}
+
+% ===== 可自主编辑的参数 =====
+\newcommand{\LectureTitle}{学科讲义}
+\newcommand{\LectureMainColor}{35566E} % 十六进制颜色，不写 #
+\newcommand{\LectureBackColor}{F2F6F8}
+\newcommand{\LectureBorderColor}{B8C8D3}
+\newcommand{\LectureCJKFont}{Songti SC}
+\newcommand{\LectureLatinFont}{Times New Roman}
+\newcommand{\LectureCodeFont}{Menlo}
+\newcommand{\LectureMathFont}{texgyretermes-math.otf}
+\newcommand{\LectureBodySize}{12pt}
+\newcommand{\LectureBodyBaseline}{14.4pt} % 默认字号的1.2倍
+\newcommand{\LectureLineSpread}{1.22}
+\newcommand{\LectureIndent}{2em}
+\newcommand{\LectureParagraphSkip}{3pt}
+\newcommand{\LectureLeftMargin}{26mm}
+\newcommand{\LectureRightMargin}{26mm}
+\newcommand{\LectureTopMargin}{25mm}
+\newcommand{\LectureBottomMargin}{25mm}
+\newcommand{\LectureSectionSize}{14pt}
+\newcommand{\LectureSubsectionSize}{12pt}
+\newcommand{\LectureCodeSize}{10pt}
+\newcommand{\LectureTOCDepth}{1}
+\newcommand{\LectureBookmarkDepth}{2}
+\newcommand{\LectureBoxPadding}{3mm}
+\newcommand{\LectureBoxRule}{0.45pt}
+\newcommand{\LectureCoverSize}{36pt}
+\newcommand{\LectureCoverOffset}{0.28\textheight}
+
+% ===== 字体、主题和基础排版 =====
+\usepackage[left=\LectureLeftMargin,right=\LectureRightMargin,
+ top=\LectureTopMargin,bottom=\LectureBottomMargin,headheight=16pt]{geometry}
+\IfFontExistsTF{\LectureCJKFont}{
+ \setCJKmainfont{\LectureCJKFont}[AutoFakeBold=2]
+ \setCJKsansfont{\LectureCJKFont}[AutoFakeBold=2]
+ \setCJKmonofont{\LectureCJKFont}[AutoFakeBold=2]
+}{
+ \setCJKmainfont{FandolSong-Regular.otf}[BoldFont={FandolSong-Bold.otf}]
+ \setCJKsansfont{FandolSong-Regular.otf}[BoldFont={FandolSong-Bold.otf}]
+ \setCJKmonofont{FandolSong-Regular.otf}[BoldFont={FandolSong-Bold.otf}]
+ \typeout{LECTURE-PREVIEW: CJK font replaced by FandolSong.}
+}
+\IfFontExistsTF{\LectureLatinFont}{\setmainfont{\LectureLatinFont}}{
+ \setmainfont{texgyretermes-regular.otf}[BoldFont={texgyretermes-bold.otf},
+ ItalicFont={texgyretermes-italic.otf},BoldItalicFont={texgyretermes-bolditalic.otf}]
+ \typeout{LECTURE-PREVIEW: Latin font replaced by TeX Gyre Termes.}
+}
+\IfFontExistsTF{\LectureCodeFont}{\setmonofont{\LectureCodeFont}}{
+ \setmonofont{lmmono10-regular.otf}
+ \typeout{LECTURE-PREVIEW: Code font replaced by Latin Modern Mono.}
+}
+\usepackage{amsmath,amssymb,unicode-math}
+\setmathfont{\LectureMathFont}
+\usepackage{xcolor,booktabs,tabularx,array,enumitem,fancyhdr,needspace}
+\usepackage[breakable,skins]{tcolorbox}
+\usepackage{fvextra,tikz}
+\usetikzlibrary{arrows.meta}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={\LectureTitle},bookmarksdepth=\LectureBookmarkDepth}
+\definecolor{ThemeMain}{HTML}{\LectureMainColor}
+\definecolor{ThemeBack}{HTML}{\LectureBackColor}
+\definecolor{ThemeBorder}{HTML}{\LectureBorderColor}
+\newtcolorbox{infobox}[1]{enhanced,breakable,title={#1},
+ colback=ThemeBack,colframe=ThemeBorder,colbacktitle=ThemeBack,
+ coltitle=ThemeMain,fonttitle=\bfseries,
+ attach title to upper={\par\smallskip},boxrule=\LectureBoxRule,
+ arc=0.8mm,left=\LectureBoxPadding,right=\LectureBoxPadding,
+ top=2mm,bottom=2mm,before skip=8pt,after skip=8pt,pad at break*=1.5mm}
+\renewcommand{\normalsize}{\fontsize{\LectureBodySize}{\LectureBodyBaseline}\selectfont}
+\linespread{\LectureLineSpread}
+\ctexset{section={format=\fontsize{\LectureSectionSize}{18pt}\selectfont\bfseries,
+ beforeskip=0pt,afterskip=14pt},
+ subsection={format=\fontsize{\LectureSubsectionSize}{15pt}\selectfont\bfseries,
+ beforeskip=12pt,afterskip=6pt}}
+\AtBeginDocument{\normalsize\setlength{\parindent}{\LectureIndent}}
+\setlength{\parskip}{\LectureParagraphSkip}
+\setcounter{tocdepth}{\LectureTOCDepth}
+\setcounter{secnumdepth}{2}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.3}
+\setlist{itemsep=3pt,topsep=4pt,parsep=0pt,leftmargin=2em}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\setlength{\emergencystretch}{1.5em}
+\allowdisplaybreaks[2]\raggedbottom
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\LectureTitle}
+\fancyhead[R]{\small\nouppercase{\leftmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+\newcommand{\chapterpage}[1]{\clearpage\section{#1}}
+\newcommand{\term}[1]{\textbf{#1}}
+\newcommand{\termdef}[2]{\hypertarget{term:#1}{\textbf{#2}}}
+\newcommand{\termref}[2]{\hyperlink{term:#1}{#2}}
+\newcommand{\exercise}[2]{\hypertarget{exercise:#1}{\textbf{#2}}\quad\hyperlink{answer:#1}{\small 查看答案}\quad}
+\newcommand{\answer}[2]{\hypertarget{answer:#1}{\textbf{#2}}\quad\hyperlink{exercise:#1}{\small 返回题目}\quad}
+\newcommand{\sol}{\par\noindent\textbf{解}\quad}
+\numberwithin{equation}{section}
+\DefineVerbatimEnvironment{codeblock}{Verbatim}{
+ fontsize=\fontsize{\LectureCodeSize}{12pt}\selectfont,
+ breaklines=true,breakanywhere=false,frame=single,
+ rulecolor=\color{ThemeBorder},framesep=2mm,numbers=left,numbersep=6pt,samepage=true}
+
+\begin{document}
+\begin{titlepage}\thispagestyle{empty}\vspace*{\LectureCoverOffset}
+\begin{center}{\fontsize{\LectureCoverSize}{45pt}\selectfont\bfseries\LectureTitle}\end{center}
+\end{titlepage}
+\pagenumbering{Roman}\thispagestyle{empty}\tableofcontents
+\clearpage\pagenumbering{arabic}
+
+\section{排版样页}\label{ch:sample}
+\begin{infobox}{样页用途}
+本页展示正文、公式、表格、图示和信息框。以下数值为固定教学示例，仅供检查排版；正式写作时，应换成该课程的资料与记号。
+\end{infobox}
+
+\subsection{正文与公式}
+\termdef{mean}{算术平均数}是各个数值之和除以数值个数。设有$n$个观测值$x_1,\ldots,x_n$，其中$n$为正整数，记平均数为$\bar{x}$，则
+\begin{equation}\bar{x}=\frac{1}{n}\sum_{i=1}^{n}x_i.\end{equation}
+这里的下标$i$表示观测次序。若观测值以厘米计，平均数也以厘米计。实际课程中应沿用用户资料的符号，不因模板使用了$x$就将原资料中的其他字母替换为$x$。
+
+\begin{infobox}{例题1.1：平均数计算}
+三个观测值为$2,4,6$，求其算术平均数。
+\end{infobox}
+\sol 数值个数为$n=3$，总和为$2+4+6=12$，因此$\bar{x}=12/3=4$。
+
+\subsection{表格与图示}
+\begin{center}
+\begin{tabularx}{\linewidth}{c c Y}
+\toprule
+观测次序 & 观测值 & 说明\\\midrule
+1 & 2 & 保留输入顺序\\
+2 & 4 & 此值恰好等于平均数\\
+3 & 6 & 样例不代表实际测量结果\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}[font=\small,>=Stealth]
+\draw[->,color=ThemeMain] (0,0)--(6.5,0) node[right]{$i$};
+\draw[->,color=ThemeMain] (0,0)--(0,2.8) node[above]{$x_i$};
+\draw[dashed,color=ThemeBorder] (0,1.6)--(6,1.6);
+\node[anchor=west] at (6.05,1.6) {$\bar{x}=4$};
+\foreach \pos/\val/\height in {1/2/0.8,3/4/1.6,5/6/2.4}{
+ \fill[color=ThemeMain] (\pos,\height) circle (2pt);
+ \node[below] at (\pos,0) {\pgfmathparse{(\pos+1)/2}\pgfmathprintnumber{\pgfmathresult}};
+ \node[above] at (\pos,\height) {\val};
+}
+\end{tikzpicture}
+\end{center}
+横轴为观测次序，纵轴为观测值；虚线表示平均数。图中文字、线条和主题色应与正文协调。
+
+\newpage
+\subsection{代码、练习与答案}
+这段Python代码与前页的计算对应，输入固定为三个数值。非编程课程可以移除此样例，改为材料分析或实验步骤。
+\begin{codeblock}
+values = [2, 4, 6]
+mean = sum(values) / len(values)
+print(mean)  # 4.0
+\end{codeblock}
+\begin{infobox}{注意：教学条件}
+上述计算要求输入非空。这里的简单样例不代替面向任意输入的完整程序；专业讲义应说明自身的简化条件。
+\end{infobox}
+\subsection{练习}
+\par\noindent\exercise{mean-1}{1.1}将观测值改为$2,4,9$，计算新的平均数并解释其变化。
+\par\noindent\exercise{mean-2}{1.2}说明平均数为什么具有与原观测值相同的单位。
+\subsection{参考答案}
+\par\noindent\answer{mean-1}{1.1}总和为15，观测数仍为3，因此平均数为5。第三个数值增加3，总和也增加3；除以3后，平均数增加1。
+
+\par\noindent\answer{mean-2}{1.2}相加的观测值单位相同，除以无单位的计数$n$后，结果仍具有原单位。
+\subsection{术语索引}
+\noindent\termref{mean}{算术平均数}\quad\hyperref[ch:sample]{本章定义与计算示例}
+\end{document}
