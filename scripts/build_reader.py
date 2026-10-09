@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Build a local, dependency-free reader from structured chapter data."""
+"""Build an offline reader with bundled KaTeX from structured chapter data."""
 import argparse
+import base64
 import json
 import re
 from pathlib import Path
@@ -31,7 +32,7 @@ def validate(data):
         for section in sections:
             if not isinstance(section, dict) or not isinstance(section.get("title"), str):
                 raise ValueError("小节需要title")
-            for key in ("equation", "source", "code"):
+            for key in ("equation", "equation_latex", "source", "code"):
                 if key in section and not isinstance(section[key], str):
                     raise ValueError(f"{key}需要字符串")
             paragraphs = section.get("paragraphs", [])
@@ -47,6 +48,24 @@ def validate(data):
                     raise ValueError("习题需要question和answer字符串")
 
 
+def bundled_math():
+    vendor = Path(__file__).resolve().parent.parent / "assets" / "vendor" / "katex"
+    css = (vendor / "katex.min.css").read_text(encoding="utf-8")
+
+    def embed_font(match):
+        font = re.search(r"url\(fonts/([\w-]+\.woff2)\)", match.group(1))
+        if not font:
+            raise ValueError("KaTeX字体样式缺少WOFF2来源")
+        encoded = base64.b64encode((vendor / "fonts" / font.group(1)).read_bytes()).decode("ascii")
+        return 'src:url(data:font/woff2;base64,' + encoded + ') format("woff2")'
+
+    css = re.sub(r"src:([^;}]+)", embed_font, css)
+    javascript = (vendor / "katex.min.js").read_text(encoding="utf-8")
+    javascript = re.sub(r"</script", r"<\\/script", javascript, flags=re.IGNORECASE)
+    license_text = (vendor / "LICENSE").read_text(encoding="utf-8").replace("--", "- -")
+    return css, javascript, license_text
+
+
 def build(input_path, output_path):
     data = json.loads(Path(input_path).read_text(encoding="utf-8"))
     validate(data)
@@ -55,9 +74,12 @@ def build(input_path, output_path):
         raise ValueError("不能用HTML覆盖输入资料")
     template = Path(__file__).resolve().parent.parent / "assets" / "reader-template.html"
     payload = json.dumps(data, ensure_ascii=False).replace("<", "\\u003c")
+    css, javascript, license_text = bundled_math()
+    output = template.read_text(encoding="utf-8")
+    output = output.replace("__KATEX_CSS__", css).replace("__KATEX_JS__", javascript)
+    output = output.replace("__KATEX_LICENSE__", license_text).replace("__LECTURE_DATA__", payload)
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(template.read_text(encoding="utf-8").replace("__LECTURE_DATA__", payload),
-                      encoding="utf-8")
+    target.write_text(output, encoding="utf-8")
     return target
 
 

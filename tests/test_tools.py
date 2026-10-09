@@ -1,5 +1,8 @@
+import base64
+from html.parser import HTMLParser
 import importlib.util
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -104,6 +107,38 @@ class ToolTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             reader.build(source, source)
 
+
+    def test_reader_bundles_math_resources_and_validates_formula_field(self):
+        spec = importlib.util.spec_from_file_location("reader", ROOT / "scripts" / "build_reader.py")
+        reader = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(reader)
+        data = {"title": "公式核对", "chapters": [{"id": "math", "title": "数学", "sections": [
+            {"title": "条件", "equation_latex": r"P(A\mid B)=\frac{P(A\cap B)}{P(B)}"}]}]}
+        source, target = self.path / "math.json", self.path / "math.html"
+        source.write_text(json.dumps(data))
+        reader.build(source, target)
+        output = target.read_text()
+        fonts = re.findall(r"data:font/woff2;base64,([A-Za-z0-9+/=]+)", output)
+        self.assertTrue(fonts, "单文件阅读页需要内嵌数学字体")
+        for font in fonts:
+            self.assertTrue(base64.b64decode(font, validate=True).startswith(b"wOF2"))
+        css, _, license_text = reader.bundled_math()
+        self.assertNotRegex(css, r"url\((?!data:)")
+        self.assertIn(license_text, output)
+        self.assertNotIn("__KATEX_", output)
+
+        class AssetParser(HTMLParser):
+            def handle_starttag(self, tag, attrs):
+                attributes = dict(attrs)
+                if tag == "script":
+                    if "src" in attributes:
+                        raise AssertionError("阅读页不能依赖外部脚本")
+                if tag == "link" and attributes.get("rel") == "stylesheet":
+                    raise AssertionError("阅读页不能依赖外部样式")
+        AssetParser().feed(output)
+        data["chapters"][0]["sections"][0]["equation_latex"] = ["invalid"]
+        with self.assertRaisesRegex(ValueError, "equation_latex"):
+            reader.validate(data)
 
 if __name__ == "__main__":
     unittest.main()

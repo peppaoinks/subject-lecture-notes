@@ -8,7 +8,13 @@
 
 想先看效果，可以下载仓库，用浏览器打开 `examples/体验示例.html`。里面可以搜索内容、换颜色、调字号和行距，也能展开答案、复制代码、导出反馈。页面在本地运行，无需启动网络服务；GitHub 的文件页只显示源码。
 
-![阅读示例：资料出处、可调排版、答案与修改对照](examples/阅读预览.jpg)
+![阅读示例：衬线正文、LaTeX 公式、习题与答案](examples/阅读预览.jpg)
+
+数学内容使用独立的公式排版。比如截图中的练习，给定 $P(B)=0.5$ 和 $P(A\cap B)=0.2$，求 $P(A\mid B)$。先确认分母为正，再代入：
+
+$$
+P(A\mid B)=\frac{P(A\cap B)}{P(B)}=\frac{0.2}{0.5}=0.4.
+$$
 
 ## 开始使用
 
@@ -97,7 +103,18 @@ python3 scripts/project_tools.py cache-check --project 我的讲义 --name exper
 python3 scripts/build_reader.py --input examples/reader-data.json --output 阅读示例.html
 ```
 
-阅读版使用结构化的章节 JSON，字段可以参考示例中的 `chapters`、`sections`、`paragraphs`、`exercises`。正文和代码按文本显示，普通文本及 Unicode 公式可以直接使用。复杂 LaTeX 公式和图示需要额外适配；目前没有整部 PDF 的无损转换功能。
+阅读版使用白底纸张、衬线正文和独立题号，公式由内置 KaTeX 排版。脚本、样式和数学字体全部写进生成的 HTML，打开时无需联网或安装额外依赖。
+
+输入为结构化章节 JSON，可参考示例中的 `chapters`、`sections`、`paragraphs`、`exercises`。正文、题干和答案用 `\(...\)` 标记行内公式、`\[...\]` 标记独立公式；单独的公式块使用 `equation_latex`。JSON 中的反斜杠需要写成两个，例如：
+
+```json
+{
+  "paragraphs": ["只有 \\(P(B)>0\\) 时，才能使用下面的公式。"],
+  "equation_latex": "P(A\\mid B)=\\frac{P(A\\cap B)}{P(B)}"
+}
+```
+
+普通文本和原有的 `equation` 字段仍可使用，代码按原文显示。不支持的公式会显示原始表达式并标记错误，需核对后修正。KaTeX 支持常见数学命令，不会编译完整 LaTeX 文档或任意宏包；图示和整部 PDF 的转换仍需另行处理。
 
 你在阅读版里调整的排版和填写的反馈会保存在当前浏览器，可以下载为 JSON，也可以复制文本。如果浏览器限制自动复制，页面会选中文本供手动复制；下载受限时仍能导出文本。
 
@@ -133,4 +150,4 @@ subject-lecture-notes/
 
 本项目由 peppaoinks 发布，采用 [MIT 许可证](LICENSE)。允许使用、修改和分发，包括商用；分发时需保留版权与许可声明。具体条款见许可证文件。
 
-将本目录内容作为自己的 GitHub 仓库根目录提交时，也请保留上述声明。
+公式排版使用 [KaTeX](https://katex.org/)，其版权与 MIT 许可保留在 [第三方许可文件](assets/vendor/katex/LICENSE) 中，并随生成的阅读页一起提供。
