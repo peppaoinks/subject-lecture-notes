@@ -1,16 +1,20 @@
 # Subject Lecture Notes
 
-跨学科中文讲义编写 Skill：沿用用户资料记号，展开解释、推导与例题，按完整章节累计交付同一主源和 PDF。
+这个 skill 用来把 PPT、教材和笔记整理成中文课程讲义。先确定读者程度、讲解深度和版式，再按完整章节补充到同一份源文件和 PDF 中，方便后续继续写或修改。
+
+讲义会沿用你提供的资料中的字母和公式约定，补足理解所需的解释、推导、例题及练习。写数学、编程或人文课程时，按学科选择合适的讲解方式。
 
 [交互示例](examples/体验示例.html) · [案例资料](examples/案例资料.md) · [资料回执](examples/资料回执.md) · [验证记录](examples/验证记录.md)
 
-GitHub文件页不会直接运行HTML。下载仓库后用浏览器打开 `examples/体验示例.html`，即可使用搜索、换色、字号/行距调整、答案展开、代码复制和反馈导出，无需网络服务。
+想先看效果，可以下载仓库，用浏览器打开 `examples/体验示例.html`。里面可以搜索内容、换颜色、调字号和行距，也能展开答案、复制代码、导出反馈。页面在本地运行，无需启动网络服务；GitHub 的文件页只显示源码。
 
 ![阅读示例：资料出处、可调排版、答案与修改对照](examples/阅读预览.jpg)
 
 ## 开始使用
 
-将整个目录放入Codex技能目录，保留名称 `subject-lecture-notes`。默认位置为 `~/.codex/skills/subject-lecture-notes/`；设置了 `CODEX_HOME` 时使用其 `skills/` 子目录。已有同名skill时先比较本地修改再更新。
+将整个目录放进 Codex 的技能目录，目录名保留为 `subject-lecture-notes`。默认路径是 `~/.codex/skills/subject-lecture-notes/`；如果设置了 `CODEX_HOME`，则放在它的 `skills/` 子目录。更新已有安装时，先检查自己改过的文件。
+
+安装后，可以这样开始：
 
 ```text
 使用 $subject-lecture-notes，根据我提供的PPT编写课程讲义。
@@ -18,7 +22,7 @@ GitHub文件页不会直接运行HTML。下载仓库后用浏览器打开 `examp
 先给我一段能看出讲解深度与排版的样稿，再按完整章节累计交付。
 ```
 
-继续或局部修改时可以说：
+后续写作直接沿用已有约定：
 
 ```text
 继续下一章，沿用已确定的资料、符号、深度和版式。
@@ -28,32 +32,32 @@ GitHub文件页不会直接运行HTML。下载仓库后用浏览器打开 `examp
 只补第二节推导，保留例题、符号和其他段落，给我修改前后对照。
 ```
 
-## 功能与实现
+## 能做什么
 
-| 功能 | 使用体验 | 实现 |
+| 功能 | 怎么用 | 对应文件或工具 |
 |---|---|---|
-| 一次设置与偏好复用 | 汇总关键缺项，区分已指定与默认 | 启动约定模板与交互流程 |
-| 资料回执与符号表 | 显示已读取范围、原页出处与疑问 | 资料回执模板与资料规则 |
-| 真实资料样稿 | 试写代表知识点，按实际反馈调整 | agent工作流程；三组自编案例 |
-| 可编辑排版 | 改色、字号、行距、缩进和页边距 | LaTeX模板与排版偏好 |
-| 专业语体润色 | humanizer可用时调用，否则内置润色 | 专业润色规则 |
-| 局部修改与对照 | 快照、文字差异、恢复预览 | `project_tools.py` |
-| 进度与继续工作 | 按章记录实际阶段，重启后保留 | 同上，项目内`.lecture/state.json` |
-| 实验结果复用 | 检查输入、输出和环境是否变化 | 同上，文件SHA-256摘要 |
-| 阅读导航 | 术语回指、题答链接、搜索与反馈 | LaTeX模板与`build_reader.py` |
+| 保存偏好 | 读者、深度和版式确定后，下一章继续沿用；临时默认值会注明 | 启动约定模板与写作流程 |
+| 核对资料 | 列出实际读到的范围、原页出处和疑问，保留符号表 | 资料回执模板与资料规则 |
+| 先写样稿 | 选资料中一个有代表性的知识点，看看深度和版式是否合适，再按反馈调整 | 样稿流程与三组自编案例 |
+| 调整排版 | 修改颜色、字体、字号、行距、缩进和页边距 | LaTeX 模板与排版偏好 |
+| 润色文字 | 保留专业语气，删去空泛和重复的表达；有 humanizer 时调用，也有内置规则 | 专业润色规则 |
+| 局部修改 | 修改前保存快照，修改后查看差异，需要回退时先生成恢复预览 | `project_tools.py` |
+| 继续工作 | 记录每章写到哪一步，重新打开项目后接着处理 | 同上，项目内 `.lecture/state.json` |
+| 复用实验结果 | 比较输入、输出文件和环境标识，判断已有结果是否仍可使用 | 同上，文件 SHA-256 摘要 |
+| 查找内容 | 用 PDF 的术语和题答链接，或在 HTML 阅读版中搜索、留下反馈 | LaTeX 模板与 `build_reader.py` |
 
-工具不会自动理解PPT、生成讲义正文或判定内容质量。提取、视觉核对、写作和实际验证由agent完成；状态记录基于实际工作，不等于检查本身。
+资料读取、公式的视觉核对、正文写作和内容检查由 agent 完成。配套脚本负责保存状态、比较文件和生成阅读版，不会自动理解 PPT 或评价讲解质量。章节状态应在实际检查完成后更新。
 
 ## 项目辅助工具
 
-脚本仅依赖Python 3.9+标准库。以下命令在仓库根目录运行，将 `我的讲义` 替换为实际项目路径。
+配套脚本仅使用 Python 3.9+ 标准库。下面的命令在仓库根目录运行，将 `我的讲义` 换成自己的项目路径。
 
 ```bash
 python3 scripts/project_tools.py init --project 我的讲义
 python3 scripts/project_tools.py progress --project 我的讲义
 ```
 
-初始化只补缺少的约定与偏好文件，保留用户已有编辑。用户可直接改项目中的Markdown文件，agent后续读取并沿用。
+初始化会补齐缺少的约定和排版偏好文件，已有文件保持原样。你可以直接编辑这些 Markdown 文件，agent 后续会读取其中的设定。
 
 修改前创建快照：
 
@@ -61,31 +65,31 @@ python3 scripts/project_tools.py progress --project 我的讲义
 python3 scripts/project_tools.py checkpoint --project 我的讲义 --files 源文件/学科讲义.tex 讲义编写约定.md --note '补充推导前'
 ```
 
-返回的 `id` 是快照编号，用它查看差异或生成恢复预览：
+命令返回的 `id` 是快照编号。用这个编号查看差异，或生成恢复预览：
 
 ```bash
 python3 scripts/project_tools.py diff --project 我的讲义 --snapshot 快照编号
 python3 scripts/project_tools.py restore-preview --project 我的讲义 --snapshot 快照编号
 ```
 
-恢复预览不覆盖当前文件。根据已授权的回退范围核对后，由agent写回并先保存最新快照；PDF等二进制文件只报告变化，不做逐行文字对照。
+恢复预览保存在单独目录中，当前文件保持原样。确定要回退哪些内容后，agent 先保存最新快照，再把核对过的内容写回。PDF 等二进制文件会报告是否变化，不提供逐行文字对照。
 
-实际工作完成后记录阶段：
+写完或检查完一章后，可以记录当前阶段：
 
 ```bash
 python3 scripts/project_tools.py progress --project 我的讲义 --chapter ch01 --title 第一章 --stage 草稿 --next 核对例题与符号
 ```
 
-阶段包括计划中、草稿、内容已核对、排版已核对、已交付，可用 `--evidence` 附实际检查说明。
+可选阶段为计划中、草稿、内容已核对、排版已核对、已交付。需要说明检查依据时，使用 `--evidence`。
 
-实验执行完毕后可记录输入、产物和真实环境标识，再判断是否可复用：
+实验运行后，记录输入、产物和实际环境标识，方便下次检查结果能否复用：
 
 ```bash
 python3 scripts/project_tools.py cache-record --project 我的讲义 --name experiment01 --files 配套实践/experiment.py 数据/input.csv --outputs 配套实践/result.txt --environment '填入实际解释器和依赖版本'
 python3 scripts/project_tools.py cache-check --project 我的讲义 --name experiment01 --environment '填入同一实际环境标识'
 ```
 
-该工具检查文件一致性，不验证实验是否科学，也不自动识别所有外部环境变化。
+工具会检查记录中的文件和环境标识是否一致。实验方法是否合理、环境里是否还有未记录的变化，需要另行核对。
 
 ## 可选阅读版
 
@@ -93,15 +97,19 @@ python3 scripts/project_tools.py cache-check --project 我的讲义 --name exper
 python3 scripts/build_reader.py --input examples/reader-data.json --output 阅读示例.html
 ```
 
-输入为结构化章节JSON，参考示例的 `chapters`、`sections`、`paragraphs`、`exercises` 等字段。正文与代码以文本渲染，普通文本/Unicode公式可直接显示。复杂LaTeX公式、图示和高保真导出需要进一步适配，不承诺自动无损转换整部PDF。
+阅读版使用结构化的章节 JSON，字段可以参考示例中的 `chapters`、`sections`、`paragraphs`、`exercises`。正文和代码按文本显示，普通文本及 Unicode 公式可以直接使用。复杂 LaTeX 公式和图示需要额外适配；目前没有整部 PDF 的无损转换功能。
 
-阅读版的排版偏好与反馈保存在当前浏览器并可导出为JSON或复制文本。浏览器限制自动复制时，会选中文本供手动复制；限制下载时仍可使用文本导出。交给agent映射后才同步正式源文件；页面不会自动改写主源或向外部服务发送反馈。
+你在阅读版里调整的排版和填写的反馈会保存在当前浏览器，可以下载为 JSON，也可以复制文本。如果浏览器限制自动复制，页面会选中文本供手动复制；下载受限时仍能导出文本。
 
-## 资料原则
+把导出的内容交给 agent 后，再同步到正式讲义。阅读页面本身只调整阅读版，不会改写源文件，也不会把反馈发给外部服务。
 
-主动询问PPT、教材、大纲或笔记，并告知用户严格沿用其中的字母、大小写、上下标、正负号、单位和公式约定。疑似错误与冲突定位说明，集中询问；关键字符不猜测。网络补充按用户的来源边界执行，原资料与补充内容分别记录。
+## 资料怎么处理
 
-humanizer只润色解释性散文，保留专业语气、事实、公式、引用、代码、限定条件和必要步骤；它不是必装依赖，也不以文本检测器分数判断质量。
+开始写作时，agent 会先询问是否有 PPT、教材、大纲或笔记。如果提供资料，讲义会严格沿用其中的字母、大小写、上下标、正负号、单位和公式约定，并向你说明这一点。
+
+遇到疑似错误、资料冲突或看不清的字符，会标出原位置，集中询问需要确认的问题。无法辨认的关键字符需先确认，再写入讲义。是否补充网络资料由你决定，补充内容和原资料分别记录。
+
+humanizer 用于润色解释性文字，保留专业语气、事实、公式、引用、代码、限定条件和必要步骤。它是可选工具，文字质量以实际阅读和内容核对为准，不用文本检测器分数衡量。
 
 ## 仓库结构
 
@@ -119,8 +127,10 @@ subject-lecture-notes/
 
 ## 设计参考
 
-输入复用参考 [Cookiecutter](https://cookiecutter.readthedocs.io/en/stable/advanced/replay.html)，资料出处参考 [Docling](https://docling-project.github.io/docling/concepts/docling_document/)，阅读工具参考 [Quarto](https://quarto.org/docs/books/book-output.html)，版本评审参考 [Anthropic skills](https://github.com/anthropics/skills/blob/main/skills/skill-creator/eval-viewer/viewer.html)。本仓库实现自己的轻量流程，不要求安装这些项目。
+保存并复用输入的做法参考了 [Cookiecutter](https://cookiecutter.readthedocs.io/en/stable/advanced/replay.html)，资料出处的记录参考了 [Docling](https://docling-project.github.io/docling/concepts/docling_document/)。阅读工具和版本对照分别参考 [Quarto](https://quarto.org/docs/books/book-output.html) 与 [Anthropic skills](https://github.com/anthropics/skills/blob/main/skills/skill-creator/eval-viewer/viewer.html)。这些项目提供设计参考，使用本 skill 无需安装它们。
 
-## 发布
+## 许可与署名
 
-将本目录内容作为自己GitHub仓库的根目录提交。作者署名与开源许可证由仓库所有者选择；本版本未预设账号或许可证。
+本项目由 peppaoinks 发布，采用 [MIT 许可证](LICENSE)。允许使用、修改和分发，包括商用；分发时需保留版权与许可声明。具体条款见许可证文件。
+
+将本目录内容作为自己的 GitHub 仓库根目录提交时，也请保留上述声明。
